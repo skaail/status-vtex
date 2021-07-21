@@ -30,7 +30,8 @@ async function scrapeStatus(url){
 
     const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt = await status1.getProperty('textContent');
-    const st1 = await txt.jsonValue();
+    //const st1 = await txt.jsonValue();
+    const st1 = "a";
 
     const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt2 = await status2.getProperty('textContent');
@@ -94,7 +95,7 @@ async function scrapeStatus(url){
               });
         }
         console.log({st1, st2, st3, st4});
-    }, 300000);
+    }, 5000);
     browser.close();
 }
 
