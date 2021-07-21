@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 const nodemailer = require("nodemailer");
 const https = require('https');
-  
+
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -20,14 +20,16 @@ const https = require('https');
   }); 
 
 async function scrapeStatus(url){
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox','--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
     await page.goto (url);
 
     const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt = await status1.getProperty('textContent');
     const st1 = await txt.jsonValue();
-
 
     const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt2 = await status2.getProperty('textContent');
@@ -40,7 +42,6 @@ async function scrapeStatus(url){
     const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt4 = await status4.getProperty('textContent');
     const st4 = await txt4.jsonValue();
-    
 
     setInterval(function(){ 
         let ts = Date.now();
@@ -51,7 +52,6 @@ async function scrapeStatus(url){
         let hours = date_ob.getHours();
         let minutes = date_ob.getMinutes();
         let seconds = date_ob.getSeconds();
-
 
         console.log({st1, st2, st3, st4});
         console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
@@ -94,25 +94,24 @@ async function scrapeStatus(url){
         }
         console.log({st1, st2, st3, st4});
     }, 6000);
-
     browser.close();
 }
 
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/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'; // PUT YOUR WEBHOOK URL HERE
+    const yourWebHookURL = 'https://hooks.slack.com/services/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';
     const userAccountNotification = {
-        "username": "Erro de disponibilidade VTex", // This will appear as user name who posts the message
-        "text": "Algum serviço VTex está indisponível.", // text
-        "icon_emoji": ":bangbang:", // User icon, you can also use custom icons here
-        "attachments": [{ // this defines the attachment block, allows for better layout usage
-          "color": "#eed140", // color of the attachments sidebar.
-          "fields": [ // actual fields
+        "username": "Erro de disponibilidade VTex",
+        "text": "Algum serviço VTex está indisponível.", 
+        "icon_emoji": ":bangbang:",
+        "attachments": [{ 
+          "color": "#eed140",
+          "fields": [ 
             {
-              "title": "Serviço", // Custom field
-              "value": "Checkout", // Custom value
-              "short": true // long fields will be full width
+              "title": "Serviço", 
+              "value": "Checkout",
+              "short": true 
             },
             {
               "title": "Status",
@@ -120,9 +119,9 @@ function sendMessage(st1, st2, st3, st4){
               "short": true
             },
             {
-                "title": "Serviço", // Custom field
-                "value": "WebStore", // Custom value
-                "short": true // long fields will be full width
+                "title": "Serviço", 
+                "value": "WebStore", 
+                "short": true 
               },
               {
                 "title": "Status",
@@ -130,9 +129,9 @@ function sendMessage(st1, st2, st3, st4){
                 "short": true
               },
               {
-                "title": "Serviço", // Custom field
-                "value": "Administrative Environment", // Custom value
-                "short": true // long fields will be full width
+                "title": "Serviço",
+                "value": "Administrative Environment", 
+                "short": true
               },
               {
                 "title": "Status",
@@ -140,9 +139,9 @@ function sendMessage(st1, st2, st3, st4){
                 "short": true
               },
               {
-                "title": "Serviço", // Custom field
-                "value": "Internal Modules", // Custom value
-                "short": true // long fields will be full width
+                "title": "Serviço", 
+                "value": "Internal Modules", 
+                "short": true 
               },
               {
                 "title": "Status",
@@ -161,24 +160,21 @@ function sendMessage(st1, st2, st3, st4){
      * @return {Promise}
      */
     function sendSlackMessage (webhookURL, messageBody) {
-      // make sure the incoming message body can be parsed into valid JSON
       try {
         messageBody = JSON.stringify(messageBody);
       } catch (e) {
         throw new Error('Failed to stringify messageBody', e);
       }
-    
-      // Promisify the https.request
+
       return new Promise((resolve, reject) => {
-        // general request options, we defined that it's a POST request and content is JSON
+
         const requestOptions = {
           method: 'POST',
           header: {
             'Content-Type': 'application/json'
           }
         };
-    
-        // actual request
+
         const req = https.request(webhookURL, requestOptions, (res) => {
           let response = '';
     
@@ -186,25 +182,21 @@ function sendMessage(st1, st2, st3, st4){
           res.on('data', (d) => {
             response += d;
           });
-    
-          // response finished, resolve the promise with data
+
           res.on('end', () => {
             resolve(response);
           })
         });
-    
-        // there was an error, reject the promise
+
         req.on('error', (e) => {
           reject(e);
         });
-    
-        // send our message body (was parsed to JSON beforehand)
+
         req.write(messageBody);
         req.end();
       });
     }
-    
-    // main
+
     (async function () {
       if (!yourWebHookURL) {
         console.error('Please fill in your Webhook URL');
