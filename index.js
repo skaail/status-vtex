@@ -18,6 +18,7 @@ const https = require('https');
     subject: "Iniciou", 
     text: "Rodando!", 
   }); 
+sendMessage("Rodando!");
 
 async function scrapeStatus(url){
     const browser = await puppeteer.launch({
@@ -93,7 +94,7 @@ async function scrapeStatus(url){
               });
         }
         console.log({st1, st2, st3, st4});
-    }, 6000);
+    }, 300000);
     browser.close();
 }
 
