@@ -30,8 +30,7 @@ async function scrapeStatus(url){
 
     const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt = await status1.getProperty('textContent');
-    //const st1 = await txt.jsonValue();
-    const st1 = "a";
+    const st1 = await txt.jsonValue();
 
     const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt2 = await status2.getProperty('textContent');
@@ -102,7 +101,7 @@ async function scrapeStatus(url){
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/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';
+    const yourWebHookURL = 'https://hooks.slack.com/services/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';
     const userAccountNotification = {
         "username": "Erro de disponibilidade VTex",
         "text": "Algum serviço VTex está indisponível.", 
