@@ -4,11 +4,11 @@ const https = require('https');
 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false, 
+    port: 465,
+    secure: true, 
     auth: {
-      user: 'blgianini@gmail.com', 
-      pass: 'bruno12131415161718',
+      user: 'process.env.EMAIL_KEY', 
+      pass: 'process.env.PASS_KEY',
     },
   });
 
@@ -30,7 +30,8 @@ async function scrapeStatus(url){
 
     const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt = await status1.getProperty('textContent');
-    const st1 = await txt.jsonValue();
+    //const st1 = await txt.jsonValue();
+  const st1 = "a";
 
     const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
     const txt2 = await status2.getProperty('textContent');
@@ -101,7 +102,7 @@ async function scrapeStatus(url){
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/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';
+    const yourWebHookURL = 'process.env.WEBHOOK';
     const userAccountNotification = {
         "username": "Erro de disponibilidade VTex",
         "text": "Algum serviço VTex está indisponível.", 
