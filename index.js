@@ -101,7 +101,7 @@ async function scrapeStatus(url){
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/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';
+    const yourWebHookURL = 'https://hooks.slack.com/services/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';
     const userAccountNotification = {
         "username": "Erro de disponibilidade VTex",
         "text": "Algum serviço VTex está indisponível.", 
