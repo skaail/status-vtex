@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 const nodemailer = require("nodemailer");
 const https = require('https');
+const webhook = "T028PDGM7L3/B028Y8ATXGB/vr6RWAo9GumIvHv46tXijyt7"
 
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -103,7 +104,7 @@ async function scrapeStatus(url){
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/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';
+    const yourWebHookURL = 'https://hooks.slack.com/services/' + webhook;
     const userAccountNotification = {
         "username": "Erro de disponibilidade VTex",
         "text": "Algum serviço VTex está indisponível.", 
