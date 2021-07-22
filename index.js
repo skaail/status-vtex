@@ -1,8 +1,10 @@
+//Bibliotecas
 const puppeteer = require('puppeteer')
 const nodemailer = require("nodemailer");
 const https = require('https');
 const webhook = "T028PDGM7L3/B028Y8ATXGB/vr6RWAo9GumIvHv46tXijyt7"
 
+//Setup email
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -21,7 +23,10 @@ let info = transporter.sendMail({
   }); 
 sendMessage("Rodando!","Rodando!","Rodando!","Rodando!");
 
+
+//Inicio do Scrape
 async function scrapeStatus(url){
+    //Criar conexão com puppeteer
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox','--disable-setuid-sandbox']
@@ -29,6 +34,7 @@ async function scrapeStatus(url){
     const page = await browser.newPage();
     await page.goto (url);
     while(true){        
+        //Setar data
         let ts = Date.now();
         let date_ob = new Date(ts);
         let date = date_ob.getDate();
@@ -37,7 +43,9 @@ async function scrapeStatus(url){
         let hours = date_ob.getHours();
         let minutes = date_ob.getMinutes();
         let seconds = date_ob.getSeconds();
-
+    
+        
+        //Recuperar Status
         const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
         const txt = await status1.getProperty('textContent');
         const st1 = await txt.jsonValue();
@@ -54,6 +62,8 @@ async function scrapeStatus(url){
         const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
         const txt4 = await status4.getProperty('textContent');
         const st4 = await txt4.jsonValue();
+        
+        //Verificar Status
         if(st1 != '\n    Operational\n  '){
             sendMessage(st1, st2, st3, st4);
             let info = transporter.sendMail({
@@ -90,11 +100,13 @@ async function scrapeStatus(url){
                 text: "Serviço de Internal Modules da VTex fora do ar!", 
               });
         }
+        
+        //Log dos status
         console.log({st1, st2, st3, st4});
             console.log({st1, st2, st3, st4});
             console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
     
-            
+        //Loop da função
         await page.waitForTimeout(1000);
     }
     browser.close();
@@ -103,6 +115,7 @@ async function scrapeStatus(url){
 
 scrapeStatus('https://status.vtex.com/#')
 
+//Setup modelo mensagem Slack
 function sendMessage(st1, st2, st3, st4){
     const yourWebHookURL = 'https://hooks.slack.com/services/' + webhook;
     const userAccountNotification = {
@@ -163,6 +176,8 @@ function sendMessage(st1, st2, st3, st4){
      * @param messageBody
      * @return {Promise}
      */
+    
+    //Enviar mensagem slack
     function sendSlackMessage (webhookURL, messageBody) {
       try {
         messageBody = JSON.stringify(messageBody);
