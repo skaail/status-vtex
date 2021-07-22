@@ -1,24 +1,24 @@
 const puppeteer = require('puppeteer')
 const nodemailer = require("nodemailer");
 const https = require('https');
-const web = 'T028PDGM7L3/B028CG7FQMV/ao3qnTSmGJwxZPSrQMSNjBdm';
-  let transporter = nodemailer.createTransport({
+
+let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: false, 
     auth: {
-      user: 'process.env.EMAIL_KEY', 
-      pass: 'process.env.PASS_KEY',
+      user: 'blgianini@gmail.com', 
+      pass: 'bruno12131415161718',
     },
-  });
+});
 
-  let info = transporter.sendMail({
+let info = transporter.sendMail({
     from: '"teste" <blgianini@gmail.com>', 
     to: "blgianini@gmail.com, blgianini@gmail.com", 
     subject: "Iniciou", 
     text: "Rodando!", 
   }); 
-sendMessage("Rodando!");
+sendMessage("Rodando!","Rodando!","Rodando!","Rodando!");
 
 async function scrapeStatus(url){
     const browser = await puppeteer.launch({
@@ -27,24 +27,7 @@ async function scrapeStatus(url){
     });
     const page = await browser.newPage();
     await page.goto (url);
-
-    const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
-    const txt = await status1.getProperty('textContent');
-    const st1 = await txt.jsonValue();
-
-    const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
-    const txt2 = await status2.getProperty('textContent');
-    const st2 = await txt2.jsonValue();
-
-    const [status3] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
-    const txt3 = await status3.getProperty('textContent');
-    const st3 = await txt3.jsonValue();
-
-    const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
-    const txt4 = await status4.getProperty('textContent');
-    const st4 = await txt4.jsonValue();
-
-    setInterval(function(){ 
+    while(true){        
         let ts = Date.now();
         let date_ob = new Date(ts);
         let date = date_ob.getDate();
@@ -54,9 +37,22 @@ async function scrapeStatus(url){
         let minutes = date_ob.getMinutes();
         let seconds = date_ob.getSeconds();
 
-        console.log({st1, st2, st3, st4});
-        console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+        const [status1] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const txt = await status1.getProperty('textContent');
+        const st1 = await txt.jsonValue();
 
+    
+        const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const txt2 = await status2.getProperty('textContent');
+        const st2 = await txt2.jsonValue();
+    
+        const [status3] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const txt3 = await status3.getProperty('textContent');
+        const st3 = await txt3.jsonValue();
+    
+        const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const txt4 = await status4.getProperty('textContent');
+        const st4 = await txt4.jsonValue();
         if(st1 != '\n    Operational\n  '){
             sendMessage(st1, st2, st3, st4);
             let info = transporter.sendMail({
@@ -94,14 +90,20 @@ async function scrapeStatus(url){
               });
         }
         console.log({st1, st2, st3, st4});
-    }, 5000);
+            console.log({st1, st2, st3, st4});
+            console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+    
+            
+        await page.waitForTimeout(1000);
+    }
     browser.close();
+    
 }
 
 scrapeStatus('https://status.vtex.com/#')
 
 function sendMessage(st1, st2, st3, st4){
-    const yourWebHookURL = 'https://hooks.slack.com/services/' + web;
+    const yourWebHookURL = 'https://hooks.slack.com/services/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';
     const userAccountNotification = {
         "username": "Erro de disponibilidade VTex",
         "text": "Algum serviço VTex está indisponível.", 
