@@ -32,8 +32,9 @@ async function scrapeStatus(url){
       args: ['--no-sandbox','--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
+    while(true){     
     await page.goto (url);
-    while(true){        
+   
         //Setar data
         let ts = Date.now();
         let date_ob = new Date(ts);
@@ -51,15 +52,15 @@ async function scrapeStatus(url){
         const st1 = await txt.jsonValue();
 
     
-        const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const [status2] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/div/span[2]');
         const txt2 = await status2.getProperty('textContent');
         const st2 = await txt2.jsonValue();
     
-        const [status3] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const [status3] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[3]/div/span[2]');
         const txt3 = await status3.getProperty('textContent');
         const st3 = await txt3.jsonValue();
     
-        const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/span[2]');
+        const [status4] = await page.$x('/html/body/div[1]/div[2]/div[2]/div[1]/div[4]/div/span[2]');
         const txt4 = await status4.getProperty('textContent');
         const st4 = await txt4.jsonValue();
         
