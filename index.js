@@ -67,39 +67,39 @@ async function scrapeStatus(url){
         //Verificar Status
         if(st1 != '\n    Operational\n  '){
             sendMessage(st1, st2, st3, st4);
-            let info = transporter.sendMail({
-                from: '"teste" <blgianini@gmail.com>', 
-                to: "blgianini@gmail.com, blgianini@gmail.com", 
-                subject: "Serviço fora do AR", 
-                text: "Serviço de Checkout da VTex fora do ar!", 
-              }); 
+            //let info = transporter.sendMail({
+            //    from: '"teste" <blgianini@gmail.com>', 
+            //    to: "blgianini@gmail.com, blgianini@gmail.com", 
+            //    subject: "Serviço fora do AR", 
+            //    text: "Serviço de Checkout da VTex fora do ar!", 
+            //  }); 
         }
         if(st2 != '\n    Operational\n  '){
           sendMessage(st1, st2, st3, st4);
-            let info = transporter.sendMail({
-                from: '"teste" <blgianini@gmail.com>', 
-                to: "blgianini@gmail.com, blgianini@gmail.com", 
-                subject: "Serviço fora do AR", 
-                text: "Serviço de WebStore da VTex fora do ar!", 
-              });
+            //let info = transporter.sendMail({
+            //    from: '"teste" <blgianini@gmail.com>', 
+            //    to: "blgianini@gmail.com, blgianini@gmail.com", 
+            //    subject: "Serviço fora do AR", 
+            //    text: "Serviço de WebStore da VTex fora do ar!", 
+            //  });
         }
         if(st3 != '\n    Operational\n  '){
           sendMessage(st1, st2, st3, st4);
-            let info = transporter.sendMail({
-                from: '"teste" <blgianini@gmail.com>', 
-                to: "blgianini@gmail.com, blgianini@gmail.com", 
-                subject: "Serviço fora do AR", 
-                text: "Serviço de Administrative Environment da VTex fora do ar!", 
-              });
+            //let info = transporter.sendMail({
+            //    from: '"teste" <blgianini@gmail.com>', 
+            //    to: "blgianini@gmail.com, blgianini@gmail.com", 
+            //    subject: "Serviço fora do AR", 
+            //    text: "Serviço de Administrative Environment da VTex fora do ar!", 
+            //  });
         }
         if(st4 != '\n    Operational\n  '){
           sendMessage(st1, st2, st3, st4);
-            let info = transporter.sendMail({
-                from: '"teste" <blgianini@gmail.com>', 
-                to: "blgianini@gmail.com, blgianini@gmail.com", 
-                subject: "Serviço fora do AR", 
-                text: "Serviço de Internal Modules da VTex fora do ar!", 
-              });
+            //let info = transporter.sendMail({
+            //    from: '"teste" <blgianini@gmail.com>', 
+            //    to: "blgianini@gmail.com, blgianini@gmail.com", 
+            //    subject: "Serviço fora do AR", 
+            //    text: "Serviço de Internal Modules da VTex fora do ar!", 
+            //  });
         }
         
         //Log dos status
@@ -108,7 +108,7 @@ async function scrapeStatus(url){
             console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
     
         //Loop da função
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(60000);
     }
     browser.close();
     
